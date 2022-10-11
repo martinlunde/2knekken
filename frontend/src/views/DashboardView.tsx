@@ -16,9 +16,9 @@ interface ComicResponse {
 }
 
 export default function DashboardView() {
-
+  
   async function getComic(): Promise<ComicResponse> {
-    const result = await fetch("2680/info.0.json");
+    const result = await fetch("xkcd/2680/info.0.json");
     return result.json();
   }
 
