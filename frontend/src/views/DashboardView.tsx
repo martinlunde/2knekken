@@ -22,7 +22,7 @@ export default function DashboardView() {
     return result.json();
   }
 
-  const { data: comic } = useQuery(["2680"], () => getComic(), { retry: false });
+  const { data: comic } = useQuery(["2680"], () => getComic());
 
   return (
     <div className="flex flex-1 flex-col justify-center">
