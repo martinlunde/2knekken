@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 
 export default function DashboardView() {
   async function getComic() {
-    const result = await fetch("2680/info.0.json");
+    const result = await fetch("xkcd/2680/info.0.json");
     return result.json();
   }
 
