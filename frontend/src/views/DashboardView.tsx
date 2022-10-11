@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
+import Button from "../components/Button";
 
 interface ComicResponse {
   day: string;
@@ -16,18 +17,24 @@ interface ComicResponse {
 }
 
 export default function DashboardView() {
+
+  const [currentComicId, setCurrentComicId] = useState<number>(2680);
   
-  async function getComic(): Promise<ComicResponse> {
-    const result = await fetch("xkcd/2680/info.0.json");
+  async function getComic(id: number): Promise<ComicResponse> {
+    const result = await fetch(`xkcd/${id.toString()}/info.0.json`);
     return result.json();
   }
 
-  const { data: comic } = useQuery(["2680"], () => getComic());
+  const { data: comic, isLoading } = useQuery([{currentComicId}], () => getComic(currentComicId));
 
   return (
     <div className="flex flex-1 flex-col justify-center">
-      <h1>{comic?.alt}</h1>
-      <img className="w-96" src={comic?.img} alt={comic?.alt} />
+      <h1>{comic?.title}</h1>
+      { !isLoading ? <img className="w-96" src={comic?.img} alt={comic?.alt} /> : <h1>is loading...</h1> }
+      <div>
+        <Button title="< previous" onClick={() => setCurrentComicId(currentComicId - 1)}/>
+        <Button title="next >"  onClick={() => setCurrentComicId(currentComicId + 1)}/>
+      </div>
     </div>
   );
 }
