@@ -19,12 +19,11 @@ app.get('/lunsj/*', (req: Request, res: Response) => {
     const date_or_number = req.path.split('/')[2];
     console.log(date_or_number);
     let date_str = date_or_number;
-    try {
+    if (date_str.match(/^\d+$/)) {
         const no = parseInt(date_or_number);
-        console.log(`convert to datestring ${no}`);
-    }
-    catch (e) {
-        // Do nothing
+        const days_since_epoch = 19275 - 2680 + no;
+        const d = new Date(days_since_epoch * 8.64e7);
+        date_str = d.toISOString().split('T')[0]
     }
     const date_parts = date_str.split('-');
     res.setHeader('Content-Type', 'application/json');

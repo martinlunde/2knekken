@@ -16,16 +16,25 @@ interface ComicResponse {
   title: string;
 }
 
+type ComicType = "XKCD" | 'lunsj';
+
 export default function DashboardView() {
 
   const [currentComicId, setCurrentComicId] = useState<number>(2680);
-  
-  async function getComic(id: number): Promise<ComicResponse> {
-    const result = await fetch(`xkcd/${id.toString()}/info.0.json`);
+  const [comicType, setComicType] = useState<ComicType>('XKCD');
+
+  async function getComic(id: number, comicType: ComicType): Promise<ComicResponse> {
+    
+    const comicUrl: { [key in ComicType]: string} = {
+      'XKCD': `xkcd/${id.toString()}/info.0.json`,
+      'lunsj': `lunsj/${id.toString()}`
+    };
+
+    const result = await fetch(comicUrl[comicType]);
     return result.json();
   }
 
-  const { data: comic, isLoading } = useQuery([{currentComicId}], () => getComic(currentComicId));
+  const { data: comic, isLoading } = useQuery([{ currentComicId, comicType }], () => getComic(currentComicId, comicType));
 
   return (
     <div className="flex flex-1 flex-col justify-center items-center bg-amber-600 h-screen">
@@ -36,6 +45,7 @@ export default function DashboardView() {
       </div>
       <div className="flex w-full justify-between pt-4">
         <Button title="< previous" onClick={() => setCurrentComicId(currentComicId - 1)}/>
+        <Button title={comicType} onClick={() => setComicType(comicType === "XKCD" ? 'lunsj' : 'XKCD')}/>
         <Button title="next >"  onClick={() => setCurrentComicId(currentComicId + 1)}/>
       </div>
       </div>
