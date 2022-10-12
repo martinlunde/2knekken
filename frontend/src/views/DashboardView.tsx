@@ -28,12 +28,16 @@ export default function DashboardView() {
   const { data: comic, isLoading } = useQuery([{currentComicId}], () => getComic(currentComicId));
 
   return (
-    <div className="flex flex-1 flex-col justify-center">
-      <h1>{comic?.title}</h1>
-      { !isLoading ? <img className="w-96" src={comic?.img} alt={comic?.alt} /> : <h1>is loading...</h1> }
-      <div>
+    <div className="flex flex-1 flex-col justify-center items-center bg-amber-600 h-screen">
+      <div className="w-50 p-4 bg-white rounded-lg flex flex-col items-center">
+      <h1 className="pb-4">{comic?.title}</h1>
+      <div className="w-96 min-h-[20vh] flex justify-center">
+        { !isLoading ? <img src={comic?.img} alt={comic?.alt} /> : <h1>is loading...</h1> }
+      </div>
+      <div className="flex w-full justify-between pt-4">
         <Button title="< previous" onClick={() => setCurrentComicId(currentComicId - 1)}/>
         <Button title="next >"  onClick={() => setCurrentComicId(currentComicId + 1)}/>
+      </div>
       </div>
     </div>
   );
